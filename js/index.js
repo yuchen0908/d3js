@@ -10,6 +10,13 @@ d3.json("../asset/menu.json").then(data => {
     const y = d3.scaleLinear()
         .domain([0, 1000])
         .range([0, 500]);
+
+    // looping through data and find the smallest and biggest number
+    const min = d3.min(data, d => d.orders);
+    const max = d3.max(data, d => d.orders);
+    const extent = d3.extent(data, d => d.orders); // return an array with min and max together
+    console.log(min, max, extent);
+    
     
     // map circling through the data
     // scaleBand is to mapping the elements and pixels on x axis
