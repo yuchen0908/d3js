@@ -1,6 +1,22 @@
-// select svg container
-// wrapped with d3 functions
-const svg = d3.select("svg");
+// creating svg in index.js
+const svg = d3.select(".canvas")
+    .append('svg')
+    .attr('width', 600)
+    .attr('height', 600);
+
+// we want to set up the margin and dimensions
+// bottom and left will be a bit more for legend
+const margin = {top:20, right:20, bottom:100, left:100};
+const graphWidth = 600 - margin.left - margin.right;
+const graphHeight = 600 - margin.bottom - margin.top;
+
+// please note the transform function and the value
+// it's a placeholder
+const graph = svg.append('g')
+    .attr('width', graphWidth)
+    .attr('height', graphHeight)
+    .attr('transform', `translate(${margin.left}, ${margin.top})`);
+
 
 // load the json file we use "d3.json(url)" and it returns "data" as the object
 // "then" function is to call back when the json file is ready
@@ -28,7 +44,7 @@ d3.json("../asset/menu.json").then(data => {
         .paddingOuter(0.2); 
 
     // we try to join the data
-    const rects = svg.selectAll("rect")
+    const rects = graph.selectAll("rect")
         .data(data);    // passing data to the rects
 
     // assuming there're rect DOMs
