@@ -30,7 +30,7 @@ d3.json("../asset/menu.json").then(data => {
     // create the y scale
     const y = d3.scaleLinear()
         .domain([0, d3.max(data, d => d.orders)])
-        .range([0, graphHeight]);
+        .range([graphHeight, 0]);
 
     // // looping through data and find the smallest and biggest number
     // const min = d3.min(data, d => d.orders);
@@ -58,24 +58,34 @@ d3.json("../asset/menu.json").then(data => {
     // if it's at 1, it will start from 70, etc..
     // since i refers the index of the element in an array of elements
     rects.attr('width', x.bandwidth)
-        .attr('height', d=>y(d.orders)) // using scale to transform the pixel value
+        .attr('height', d=>graphHeight - y(d.orders)) // using scale to transform the pixel value
         .attr('fill', "orange")
-        .attr('x', d => x(d.name));
+        .attr('x', d => x(d.name))
+        .attr('y', d => y(d.orders));
     
     // if there is not
     // appending rects to the object
     rects.enter()
         .append('rect')
             .attr('width', x.bandwidth)
-            .attr('height', d=>y(d.orders))
+            .attr('height', d=>graphHeight - y(d.orders))
             .attr('fill', "orange")
-            .attr('x', d => x(d.name));
+            .attr('x', d => x(d.name))
+            .attr('y', d => y(d.orders));
     
     // create and call axes
     const xAxis = d3.axisBottom(x);
-    const yAxis = d3.axisLeft(y);
+    const yAxis = d3.axisLeft(y)
+        .ticks(3)
+        .tickFormat(d => d + ' orders');
 
     xAxisGroup.call(xAxis);
     yAxisGroup.call(yAxis);
+
+    // adding some labels to x axis
+    xAxisGroup.selectAll('text')
+        .attr('transform', 'rotate(-40)')
+        .attr('text-anchor', 'end')
+        .attr('fill', 'orange');
 
 });
