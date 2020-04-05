@@ -17,6 +17,11 @@ const graph = svg.append('g')
     .attr('height', graphHeight)
     .attr('transform', `translate(${margin.left}, ${margin.top})`);
 
+// creating x and y axis
+const xAxisGroup = graph.append('g')
+    .attr('transform', `translate(0, ${graphHeight})`);
+const yAxisGroup = graph.append('g');
+
 
 // load the json file we use "d3.json(url)" and it returns "data" as the object
 // "then" function is to call back when the json file is ready
@@ -25,7 +30,7 @@ d3.json("../asset/menu.json").then(data => {
     // create the y scale
     const y = d3.scaleLinear()
         .domain([0, d3.max(data, d => d.orders)])
-        .range([0, 500]);
+        .range([0, graphHeight]);
 
     // // looping through data and find the smallest and biggest number
     // const min = d3.min(data, d => d.orders);
@@ -65,4 +70,12 @@ d3.json("../asset/menu.json").then(data => {
             .attr('height', d=>y(d.orders))
             .attr('fill', "orange")
             .attr('x', d => x(d.name));
+    
+    // create and call axes
+    const xAxis = d3.axisBottom(x);
+    const yAxis = d3.axisLeft(y);
+
+    xAxisGroup.call(xAxis);
+    yAxisGroup.call(yAxis);
+
 });
